@@ -1,6 +1,10 @@
 const express = require("express");
+const cors = require('cors')
 const app = express();
 const port = process.env.PORT || 8000;
+
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("home is comming from express js");
@@ -20,6 +24,14 @@ const users = [
 app.get("/users", (req, res) => {
   res.send(users);
 });
+
+app.post("/users", (req, res) => {
+  console.log("Data is the request:", req.body)
+  const newUser = req.body;
+  newUser.id = users.length + 1;
+  users.push(newUser);
+  res.send({success: true, data: newUser, message: "User is added Successfully"})
+})
 
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
